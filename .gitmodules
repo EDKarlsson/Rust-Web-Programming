@@ -1,0 +1,6 @@
+[submodule "Rust-Web-Programming"]
+	path = Rust-Web-Programming
+	url = https://github.com/PacktPublishing/Rust-Web-Programming
+[submodule "book"]
+	path = book
+	url = https://github.com/PacktPublishing/Rust-Web-Programming
