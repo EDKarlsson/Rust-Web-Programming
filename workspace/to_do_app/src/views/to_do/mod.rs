@@ -4,6 +4,7 @@ mod create;
 mod get;
 mod utils;
 mod edit;
+mod delete;
 
 use super::path::Path;
 
