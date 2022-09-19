@@ -3,6 +3,7 @@ use actix_web::web;
 mod path;
 mod auth;
 mod to_do;
+mod token;
 
 pub fn views_factory(app: &mut web::ServiceConfig) {
 /*    let args: Vec<String> = env::args().collect();
