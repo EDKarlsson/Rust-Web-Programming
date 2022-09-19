@@ -1,9 +1,9 @@
 use crate::to_do::structs::base::Base;
 use crate::to_do::ItemTypes;
-use actix_web::{web, Error, HttpRequest, HttpResponse, Responder};
-use futures::future::{ready, Ready};
+use actix_web::body::BoxBody;
+use actix_web::{ HttpRequest, HttpResponse, Responder};
+// use futures::future::{ready, Ready};
 use serde::Serialize;
-// use std::future::pending;
 use std::vec::Vec;
 
 #[derive(Serialize)]
@@ -37,12 +37,12 @@ impl ToDoItems {
 }
 
 impl Responder for ToDoItems {
-    type Error = Error;
-    type Future = Ready<Result<HttpResponse, Error>>;
-    fn respond_to(self, _req: &HttpRequest) -> Self::Future {
+    type Body = BoxBody;
+
+    fn respond_to(self, _req: &HttpRequest) -> HttpResponse<Self::Body> {
         let body = serde_json::to_string(&self).unwrap();
-        ready(Ok(HttpResponse::Ok()
+        HttpResponse::Ok()
             .content_type("application/json")
-            .body(body)))
+            .body(body)
     }
 }
