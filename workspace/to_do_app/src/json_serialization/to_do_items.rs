@@ -1,7 +1,7 @@
 use crate::to_do::structs::base::Base;
 use crate::to_do::ItemTypes;
 use actix_web::body::BoxBody;
-use actix_web::{ HttpRequest, HttpResponse, Responder};
+use actix_web::{HttpRequest, HttpResponse, Responder};
 // use futures::future::{ready, Ready};
 use serde::Serialize;
 use std::vec::Vec;
@@ -27,12 +27,12 @@ impl ToDoItems {
         }
         let done_count: i8 = done_array_buffer.len() as i8;
         let pending_count: i8 = pending_array_buffer.len() as i8;
-        return ToDoItems {
+        ToDoItems {
             pending_items: pending_array_buffer,
             done_item_count: done_count,
             pending_item_count: pending_count,
             done_items: done_array_buffer,
-        };
+        }
     }
 }
 
