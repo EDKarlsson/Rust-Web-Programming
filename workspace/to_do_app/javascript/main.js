@@ -1,13 +1,15 @@
 function renderItems(items, processType, elementId, processFunction) {
     let placeholder = "<div>";
     let itemsMeta = [];
-
-    for (i = 0; i < items.length; i++) {
+    // console.log({items});
+    for (let i = 0; i < items.length; i++) {
         let title = items[i]["title"];
         let placeholderId = processType + "-" + title.replaceAll(" ", "-");
-        placeholder += "<div>" + title +
-            "<button " + 'id="' + placeholderId + '">'
-            + processType + '</button>' + "</div>";
+
+        placeholder += '<div class="itemContainer">' +
+            '<p>' + title + '</p>' +
+            '<div class="actionButton" ' + 'id="' + placeholderId + '">'
+            + processType + '</div>' + '</div>';
         itemsMeta.push({"id": placeholderId, "title": title});
     }
     placeholder += "</div>"
@@ -21,13 +23,13 @@ function renderItems(items, processType, elementId, processFunction) {
 function apiCall(url, method) {
     let xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
+    // console.log(`url=${url},method=${method}`)
     xhr.addEventListener('readystatechange', function () {
         if (this.readyState === this.DONE) {
-            renderItems(JSON
-                    .parse(this.responseText)["pending_items"],
+            // console.log(`this.responseText=${this.responseText}`);
+            renderItems(JSON.parse(this.responseText)["pending_items"],
                 "edit", "pendingItems", editItem);
-            renderItems(JSON
-                    .parse(this.responseText)["done_items"],
+            renderItems(JSON.parse(this.responseText)["done_items"],
                 "delete", "doneItems", deleteItem);
         }
     });
@@ -35,6 +37,16 @@ function apiCall(url, method) {
     xhr.setRequestHeader('content-type', 'application/json');
     xhr.setRequestHeader('user-token', 'token');
     return xhr;
+}
+
+function editItem() {
+    let title = this.id.replaceAll("-", " ").replace("edit ", "");
+    let call = apiCall("/item/edit", "PUT");
+    let json = {
+        "title": title,
+        "status": "done"
+    };
+    call.send(JSON.stringify(json));
 }
 
 function deleteItem() {
@@ -54,12 +66,12 @@ function getItems() {
 
 getItems();
 
-document.getElementById("create-button")
-    .addEventListener( "click", createItem);
+document.getElementById("create-button").addEventListener("click", createItem);
 
 function createItem() {
     let title = document.getElementById("name");
     let call = apiCall("/item/create/" + title.value, "POST");
+    // console.log(`createItem(): call=${call}`)
     call.send();
     document.getElementById("name").value = null;
 }

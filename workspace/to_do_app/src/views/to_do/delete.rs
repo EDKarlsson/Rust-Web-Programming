@@ -14,5 +14,6 @@ pub async fn delete(to_do_item: web::Json<ToDoItem>) -> HttpResponse {
         Err(_item) => return HttpResponse::BadRequest().json(format!("{} not accepted", status)),
         Ok(item) => process_input(item, String::from("delete"), &state),
     }
-    HttpResponse::Ok().json(return_state())
+    let todo_item = return_state();
+    HttpResponse::Ok().json(todo_item)
 }

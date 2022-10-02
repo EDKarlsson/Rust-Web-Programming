@@ -2,8 +2,8 @@ use crate::to_do::structs::base::Base;
 use crate::to_do::ItemTypes;
 use actix_web::body::BoxBody;
 use actix_web::{HttpRequest, HttpResponse, Responder};
-// use futures::future::{ready, Ready};
 use serde::Serialize;
+use std::fmt;
 use std::vec::Vec;
 
 #[derive(Serialize)]
@@ -44,5 +44,36 @@ impl Responder for ToDoItems {
         HttpResponse::Ok()
             .content_type("application/json")
             .body(body)
+    }
+}
+
+impl fmt::Display for ToDoItems {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let mut print_string = String::new();
+
+        if self.pending_item_count > 0 {
+            print_string.push_str("pending_items=[");
+            for pending_item in self.pending_items.iter() {
+                print_string.push_str(pending_item.title.as_str());
+                print_string.push(',');
+            }
+            print_string.push_str("]\n");
+        }
+        if self.done_item_count > 0 {
+            print_string.push_str("done_items=[");
+            for done_item in self.done_items.iter() {
+                print_string.push_str(done_item.title.as_str());
+                print_string.push(',');
+            }
+            print_string.push_str("]\n");
+        }
+        print_string.push_str(
+            format!(
+                "pending_item_count={},done_item_count={}",
+                self.pending_item_count, self.done_item_count
+            )
+            .as_str(),
+        );
+        write!(f, "{}", print_string)
     }
 }
